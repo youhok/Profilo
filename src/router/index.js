@@ -12,6 +12,8 @@ import AdminLayout from "../components/backend/layouts/AdminLayout.vue";
 import Settings from "../components/backend/Settings.vue";
 
 const routes = [
+    // Public alias to ensure login is reachable even if backend meta changes
+    { path: "/auth/login", name: "PublicLogin", component: Login, meta: { isBackend: true, guestOnly: true } },
     { path: "/login", name: "Login", component: Login, meta: { isBackend: true, guestOnly: true } },
     { path: "/register", name: "Register", component: Register, meta: { isBackend: true, guestOnly: true } },
     {
@@ -62,15 +64,19 @@ router.beforeEach((to, _from, next) => {
 
     if (isDev) return proceedWithAuthCheck();
 
-    // Production: hide backend routes from unauthenticated users entirely
+    // Production: allow guest routes, hide protected backend pages from unauthenticated users
     let resolved = false;
     const stop = onAuthStateChanged(auth, (user) => {
         if (resolved) return;
         resolved = true;
         stop();
-        if (!user && isBackendRoute) return next({ path: "/" });
+        // If already logged in, keep them away from guest-only pages (login/register)
         if (guestOnly && user) return next({ path: "/dashboard" });
-        if (requiresAuth && !user) return next({ path: "/login" });
+        // If not logged in and the route is guest-only (e.g., /login, /register), allow
+        if (!user && isBackendRoute && guestOnly) return next();
+        // If not logged in and trying to access protected backend pages, send to login
+        if (!user && isBackendRoute && requiresAuth) return next({ path: "/login" });
+        // Allow access to any other backend routes that don't require auth (none currently)
         return next();
     });
 });

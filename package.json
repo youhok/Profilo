@@ -8,7 +8,8 @@
     "build": "PATH=/usr/local/opt/node@20/bin:$PATH vite build",
     "build:dev": "PATH=/usr/local/opt/node@20/bin:$PATH vite build --mode development",
     "lint": "eslint .",
-    "preview": "PATH=/usr/local/opt/node@20/bin:$PATH vite preview"
+    "preview": "PATH=/usr/local/opt/node@20/bin:$PATH vite preview",
+    "deploy": "npm run build && npx --yes firebase-tools@latest deploy --only hosting"
   },
   "dependencies": {
     "@emailjs/browser": "4.4.1",
