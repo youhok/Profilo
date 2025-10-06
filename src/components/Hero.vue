@@ -9,7 +9,7 @@ function scrollToSection(sectionId: string) {
 </script>
 
 <template>
-  <section class="min-h-screen bg-gradient-hero flex items-center justify-center px-6">
+  <section id="hero" class="min-h-screen bg-gradient-hero flex items-center justify-center px-6">
     <div class="container max-w-6xl mx-auto">
       <div class="grid lg:grid-cols-2 gap-12 items-center">
         <div class="space-y-6">
@@ -24,13 +24,13 @@ function scrollToSection(sectionId: string) {
           </div>
           <div class="flex flex-col sm:flex-row gap-4">
             <button 
-              class="px-6 py-3 rounded-md bg-gradient-accent text-primary-foreground font-semibold hover:shadow-glow transition-all duration-300"
+              class="px-6 py-3 rounded-md bg-primary text-primary-foreground font-semibold hover:brightness-90 transition-all duration-300"
               @click="() => scrollToSection('projects')"
             >
               View My Work
             </button>
             <button 
-              class="px-6 py-3 rounded-md border border-border hover:bg-secondary transition-all duration-300"
+              class="px-6 py-3 rounded-md border border-border hover:bg-accent transition-all duration-300"
               @click="() => scrollToSection('contact')"
             >
               Get In Touch

@@ -11,13 +11,16 @@
     "preview": "PATH=/usr/local/opt/node@20/bin:$PATH vite preview"
   },
   "dependencies": {
-    "vue": "^3.5.11",
+    "@emailjs/browser": "4.4.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
+    "firebase": "^12.2.1",
     "input-otp": "^1.4.2",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
+    "vue": "^3.5.11",
+    "vue-router": "^4.5.1",
     "zod": "^3.25.76"
   },
   "devDependencies": {

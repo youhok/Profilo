@@ -1,16 +1,47 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { sendContactEmail } from '@/lib/email'
+import { db } from '@/firebase'
+import { addDoc, collection, Timestamp } from 'firebase/firestore'
 
 const name = ref('')
 const email = ref('')
 const subject = ref('')
 const message = ref('')
+const sending = ref(false)
+const error = ref('')
+const success = ref(false)
 
-function onSubmit(e: Event) {
+async function onSubmit(e: Event) {
   e.preventDefault()
-  // Placeholder submit; integrate with your backend or email service
-  // eslint-disable-next-line no-alert
-  alert('Message sent!')
+  error.value = ''
+  success.value = false
+  sending.value = true
+  try {
+    await sendContactEmail({
+      name: name.value,
+      email: email.value,
+      subject: subject.value,
+      message: message.value
+    })
+    // Persist message for dashboard counts/history
+    await addDoc(collection(db, 'messages'), {
+      name: name.value,
+      email: email.value,
+      subject: subject.value,
+      message: message.value,
+      createdAt: Timestamp.now()
+    })
+    name.value = ''
+    email.value = ''
+    subject.value = ''
+    message.value = ''
+    success.value = true
+  } catch (e: any) {
+    error.value = e?.message || 'Failed to send message'
+  } finally {
+    sending.value = false
+  }
 }
 
 const contactInfo = [
@@ -122,10 +153,13 @@ const socialLinks = [
             
             <button 
               type="submit" 
-              class="w-full px-6 py-3 rounded-md bg-gradient-accent text-primary-foreground font-semibold hover:shadow-glow transition-all duration-300"
+              :disabled="sending"
+              class="w-full px-6 py-3 rounded-md bg-primary text-primary-foreground font-semibold hover:brightness-90 transition-all duration-300 disabled:opacity-70"
             >
-              Send Message
+              {{ sending ? 'Sending…' : 'Send Message' }}
             </button>
+            <p v-if="error" class="text-sm text-red-500 text-center">{{ error }}</p>
+            <p v-if="success" class="text-sm text-green-600 text-center">Sent! I'll reply soon.</p>
           </form>
         </div>
       </div>

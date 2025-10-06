@@ -53,7 +53,7 @@ const experiences = [
                 <h4 class="text-lg font-semibold">{{ exp.title }}</h4>
                 <span class="text-sm text-muted-foreground">{{ exp.period }}</span>
               </div>
-              <p class="text-accent font-medium">{{ exp.company }}</p>
+              <p class="text-foreground font-medium">{{ exp.company }}</p>
               <p class="text-muted-foreground text-sm leading-relaxed">{{ exp.description }}</p>
             </div>
           </div>

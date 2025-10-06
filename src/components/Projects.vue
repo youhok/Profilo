@@ -1,42 +1,27 @@
 <script setup lang="ts">
-const projects = [
-  {
-    title: 'E-Commerce Platform',
-    description: 'A modern, responsive e-commerce platform built with React and Node.js. Features include real-time inventory, payment processing, and admin dashboard.',
-    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=800&q=80',
-    technologies: ['React', 'Node.js', 'TypeScript', 'Stripe', 'MongoDB'],
-    liveUrl: '#',
-    githubUrl: '#',
-    featured: true
-  },
-  {
-    title: 'Task Management App',
-    description: 'Collaborative task management application with real-time updates, drag-and-drop functionality, and team workspaces.',
-    image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?auto=format&fit=crop&w=800&q=80',
-    technologies: ['Vue.js', 'Firebase', 'Tailwind CSS', 'Vuex'],
-    liveUrl: '#',
-    githubUrl: '#',
-    featured: false
-  },
-  {
-    title: 'Weather Dashboard',
-    description: 'Interactive weather dashboard with location-based forecasts, historical data visualization, and severe weather alerts.',
-    image: 'https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?auto=format&fit=crop&w=800&q=80',
-    technologies: ['React', 'D3.js', 'OpenWeather API', 'Chart.js'],
-    liveUrl: '#',
-    githubUrl: '#',
-    featured: false
-  },
-  {
-    title: 'Portfolio Website',
-    description: 'A sleek, modern portfolio website with smooth animations, dark mode support, and optimized performance.',
-    image: 'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&fit=crop&w=800&q=80',
-    technologies: ['Next.js', 'Framer Motion', 'Tailwind CSS', 'Vercel'],
-    liveUrl: '#',
-    githubUrl: '#',
-    featured: true
-  }
-]
+import { ref, onMounted } from 'vue'
+import { collection, getDocs, orderBy, query } from 'firebase/firestore'
+import { db } from '@/firebase'
+
+type Project = {
+  id?: string
+  title: string
+  description: string
+  image: string
+  technologies: string[]
+  liveUrl?: string
+  githubUrl?: string
+  featured?: boolean
+}
+
+const projects = ref<Project[]>([])
+
+async function fetchProjects() {
+  const snap = await getDocs(query(collection(db, 'projects'), orderBy('createdAt', 'desc')))
+  projects.value = snap.docs.map(d => ({ id: d.id, ...(d.data() as Omit<Project,'id'>) }))
+}
+
+onMounted(fetchProjects)
 </script>
 
 <template>
@@ -52,7 +37,7 @@ const projects = [
       <div class="grid md:grid-cols-2 gap-8">
         <div 
           v-for="(project, index) in projects" 
-          :key="index" 
+          :key="project.id || index" 
           :class="['overflow-hidden bg-gradient-card border border-border rounded-lg hover:shadow-xl transition-all duration-300 group', project.featured ? 'md:col-span-2 lg:col-span-1' : '']"
         >
           <div class="relative overflow-hidden">
@@ -93,4 +78,3 @@ const projects = [
 
 <style scoped>
 </style>
-

@@ -1,26 +1,20 @@
 <script setup lang="ts">
-const skillCategories = [
-  {
-    title: 'Frontend Development',
-    skills: ['Javascript', 'TypeScript', 'Next.js', 'Vue.js', 'Tailwind CSS', 'Framer Motion'],
-    icon: '💻'
-  },
-  {
-    title: 'Backend Development',
-    skills: ['Node.js', 'Express.js', 'SQL Server', 'MongoDB', 'REST APIs', 'GraphQL'],
-    icon: '⚙️'
-  },
-  {
-    title: 'Design Tools',
-    skills: ['Figma', 'Adobe XD', 'Sketch', 'Photoshop', 'Illustrator', 'Prototyping'],
-    icon: '🎨'
-  },
-  {
-    title: 'Development Tools',
-    skills: ['Git', 'Docker', 'AWS', 'Vercel', 'Jest', 'Cypress'],
-    icon: '🛠️'
-  }
-]
+import { ref, onMounted } from 'vue'
+import { collection, getDocs, orderBy, query } from 'firebase/firestore'
+import { db } from '@/firebase'
+
+type SkillCategory = { title: string; icon: string; skills: string[] }
+
+const skillCategories = ref<SkillCategory[]>([])
+
+async function loadCategories() {
+  const colRef = collection(db, 'skillCategories')
+  const q = query(colRef, orderBy('createdAt', 'desc'))
+  const snap = await getDocs(q)
+  skillCategories.value = snap.docs.map(d => d.data() as SkillCategory)
+}
+
+onMounted(loadCategories)
 </script>
 
 <template>
@@ -62,4 +56,3 @@ const skillCategories = [
 
 <style scoped>
 </style>
-
