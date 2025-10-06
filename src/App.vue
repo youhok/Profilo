@@ -15,7 +15,7 @@ const showLanding = computed(() => !route.meta?.isBackend)
 
 <template>
   <Navigation v-if="showLanding" />
-  <main v-if="showLanding" class="bg-background text-foreground">
+  <main v-if="showLanding" class="bg-background text-foreground pt-20 md:pt-24">
     <Hero />
     <About />
     <Skills />

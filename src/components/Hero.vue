@@ -14,11 +14,13 @@ function scrollToSection(sectionId: string) {
       <div class="grid lg:grid-cols-2 gap-12 items-center">
         <div class="space-y-6">
           <div class="space-y-4">
-            <h1 class="text-5xl lg:text-7xl font-bold tracking-tight">
+            <h1 class="text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight leading-tight">
               Hello, I'm <span class="bg-gradient-accent bg-clip-text text-transparent">Heng Youhok</span>
             </h1>
-            <p class="text-xl lg:text-2xl text-muted-foreground">Creative Developer & UI/UX Designer</p>
-            <p class="text-lg text-muted-foreground max-w-lg">
+            <p class="text-lg sm:text-xl lg:text-2xl text-muted-foreground">
+              Creative Developer & UI/UX Designer
+            </p>
+            <p class="text-base sm:text-lg text-muted-foreground max-w-lg">
               I craft beautiful, functional digital experiences that bridge the gap between creativity and technology.
             </p>
           </div>
